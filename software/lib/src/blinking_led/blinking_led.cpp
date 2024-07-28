@@ -1,50 +1,44 @@
-#include "Arduino.h"
 #include "blinking_led.h"
 
-int ledPin = 0;
-int ledState = LOW;
-unsigned long previousMillis = 0;
-long interval = 0;
+BlinkingLed::BlinkingLed(int pin, bool state, unsigned long prevMillis, long blinkInterval)
+    : ledPin(pin), ledState(state), previousMillis(prevMillis), interval(blinkInterval) {
+}
 
-void SetLedPin(int pin) {
+void BlinkingLed::setLedPin(int pin) {
     ledPin = pin;
 }
 
-void SetLedState(bool state) {
+void BlinkingLed::setLedState(bool state) {
     ledState = state;
 }
 
-void SetBlinkInterval(long blinkInterval) {
+void BlinkingLed::setBlinkInterval(long blinkInterval) {
     interval = blinkInterval;
 }
 
-void SetPreviousMillis(unsigned long millis) {
+void BlinkingLed::setPreviousMillis(unsigned long millis) {
     previousMillis = millis;
 }
 
-bool GetLedState(void) {
+bool BlinkingLed::getLedState() const {
     return ledState;
 }
 
-void InitBlinkLed(int pin, bool state, unsigned long prevMillis, long blinkInterval) {
-    SetLedPin(pin);
-    SetBlinkInterval(blinkInterval);
-    SetPreviousMillis(prevMillis);
-    SetLedState(state);
-
+void BlinkingLed::InitBlinkLed() {
     pinMode(ledPin, OUTPUT);
+    digitalWrite(ledPin, ledState);
 }
 
-void BlinkLed(void) {
+void BlinkingLed::BlinkLed() {
     unsigned long currentMillis = millis();
 
     if (currentMillis - previousMillis >= interval) {
-        SetPreviousMillis(currentMillis);
+        setPreviousMillis(currentMillis);
 
-        if (ledState == GetLedState()) {
-            SetLedState(HIGH);
+        if (ledState == getLedState()) {
+            setLedState(HIGH);
         } else {
-            SetLedState(LOW);
+            setLedState(LOW);
         }
 
         digitalWrite(ledPin, ledState);
