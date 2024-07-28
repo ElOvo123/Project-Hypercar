@@ -1,6 +1,6 @@
 // main.ino
 #include <Arduino.h>
-#include "src/test.h"
+#include "src/debounce/test.h"
 
 void setup() {
     Serial.begin(9600);
