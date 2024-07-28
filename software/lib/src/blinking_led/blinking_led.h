@@ -1,8 +1,6 @@
 #ifndef BLINKING_LED_H
 #define BLINKING_LED_H
 
-#include <Arduino.h>
-
 class BlinkingLed {
 private:
     int ledPin;
