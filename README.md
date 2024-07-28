@@ -90,8 +90,8 @@ feat(aero): improve airflow efficiency in front spoiler
 
 ##### 6.1.2 Commit Message Body
 
-- **Provide additional context about what and why the change was made.
-- **Include any relevant issue numbers or links.
+- Provide additional context about what and why the change was made.
+- Include any relevant issue numbers or links.
 
 ##### 6.1.3 Types of Commit Messages
 
@@ -109,9 +109,9 @@ To ensure code quality and maintainability, please adhere to the following codin
 
 ##### 6.2.1 General Guidelines
 
-- **Follow the Google C++ Style Guide for C++ code.**
-- **Use descriptive variable and function names.**
-- **Write clear and concise comments where necessary.**
+- Follow the Google C++ Style Guide for C++ code.
+- Use descriptive variable and function names.
+- Write clear and concise comments where necessary.
 
 ##### 6.2.1 Formatting
 
@@ -136,9 +136,9 @@ if (condition) {
 
 ##### 6.2.1 Code Review
 
-- **All code changes should be submitted through pull requests.**
-- **Pull requests should be reviewed by at least one other team member.**
-- **Ensure that all checks pass before merging.**
+- All code changes should be submitted through pull requests.
+- Pull requests should be reviewed by at least one other team member.
+- Ensure that all checks pass before merging.
 
 ### 7. Contribute
 
