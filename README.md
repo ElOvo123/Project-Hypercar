@@ -14,7 +14,11 @@ The Hypercar Project aims to create a high-performance vehicle by integrating:
 
 Follow these steps to get started with the Hypercar Project:
 
-### 1. Clone the Repository
+### 1. Install Arduino CLI (Prerequisite)
+
+Follow the installation instructions on the [Arduino CLI GitHub page](https://arduino.github.io/arduino-cli/0.19/installation/).
+
+### 2. Clone the Repository
 
 First, clone the repository to your local machine:
 
@@ -22,7 +26,7 @@ First, clone the repository to your local machine:
 git clone https://github.com/your-username/Project-Hypercar.git
 ```
 
-### 2. Navigate to the Project Directory
+### 3. Navigate to the Project Directory
 
 Change your working directory to the project folder:
 
