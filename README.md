@@ -47,9 +47,9 @@ Upload the program to see the current progress and test features:
 make
 ```
 
-#### 5.3 Run Interface and Telemetry
+#### 5.3 Run The Interface and Telemetry
 
-Compile and execute the program to see teh current progress and features:
+Compile and execute the program to see the current progress and features:
 
 - **Interface**
 
@@ -64,3 +64,10 @@ make
 make
 ./bin/telemetry
 ```
+### 6. Contribute
+
+We welcome contributions! Here's how you can help:
+
+- **Report Bugs**: If you find any issues, please report them in the Issues section.
+- **Suggest Features**: We are open to new ideas and feature requests.
+- **Submit Pull Requests**: Feel free to fork the repository, make improvements, and submit a pull request.
