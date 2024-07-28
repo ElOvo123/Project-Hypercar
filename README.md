@@ -48,8 +48,21 @@ cd Project-Hypercar/software
 
 ### Project Structure
 
-PROJECT-HYPERCAR
-|-
+```css
+Project-Hypercar/
+├── software/
+│   ├── lib/
+│   │   ├── build/
+│   │   │   ├── board.mk
+│   │   │   └── compile.mk
+│   │   ├── src/
+│   │   │   ├── test.cpp
+│   │   │   └── test.h
+│   │   ├── lib.ino
+│   │   └── lib.ino
+│   
+└──  README.md
+```
 
 ### Run The Project
 #### Verify the Project PCB Code
