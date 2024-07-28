@@ -4,9 +4,10 @@
 
 void setup() {
     Serial.begin(9600);
+    InitBlinkLed(LED_BUILTIN, LOW, 0, 1000);
 }
 
 void loop() {
     sayHello();
-    sayHelloAgain();
+    BlinkLed();
 }
