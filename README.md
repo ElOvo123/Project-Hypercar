@@ -20,3 +20,47 @@ First, clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/your-username/Project-Hypercar.git
+```
+
+### 2. Navigate to the Project Directory
+
+Change your working directory to the project folder:
+
+```bash
+cd Project-Hypercar/software
+```
+
+### 5. Run The Project
+#### 5.1 Verify the Project PCB Code
+
+Compile the program to see the current progress and test features:
+
+```bash
+make verify
+```
+
+#### 5.2 Upload the Project PCB Code
+
+Upload the program to see the current progress and test features:
+
+```bash
+make
+```
+
+#### 5.3 Run Interface and Telemetry
+
+Compile and execute the program to see teh current progress and features:
+
+- **Interface**
+
+```bash
+make
+./bin/interface
+```
+
+- **Telemetry**
+
+```bash
+make
+./bin/telemetry
+```
