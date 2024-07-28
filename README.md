@@ -71,3 +71,7 @@ We welcome contributions! Here's how you can help:
 - **Report Bugs**: If you find any issues, please report them in the Issues section.
 - **Suggest Features**: We are open to new ideas and feature requests.
 - **Submit Pull Requests**: Feel free to fork the repository, make improvements, and submit a pull request.
+
+###
+
+Thank you for being part of the Hypercar Project! Together, we can push the boundaries of automotive technology and create something truly extraordinary.
