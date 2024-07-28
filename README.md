@@ -68,7 +68,55 @@ make
 make
 ./bin/telemetry
 ```
-### 6. Contribute
+### 6. Standards
+#### 6.1 Commit Standards
+
+To maintain a clean and organized history in our version control, we follow these commit standards:
+
+##### 6.1.1 Commit Message Structure
+
+- **Type**: A short keyword that categorizes the commit (e.g., feat, fix, docs, style, refactor, test, chore).
+- **Scope**: An optional component or module the change pertains to (e.g., aero, propulsion).
+- **Description**: A brief, imperative-style summary of the change
+
+```bash
+<type>(<scope>): <description> 
+```
+
+Example:
+```bash
+feat(aero): improve airflow efficiency in front spoiler
+```
+
+##### 6.1.2 Commit Message Body
+
+- **Provide additional context about what and why the change was made.
+- **Include any relevant issue numbers or links.
+
+##### 6.1.3 Types of Commit Messages
+
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **test**: Adding missing tests or correcting existing tests
+- **chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
+
+#### 6.2 Coding Standards
+
+To ensure code quality and maintainability, please adhere to the following coding standards:
+
+##### 6.1.1 Commit Message Structure
+##### 6.1.1 Commit Message Structure
+##### 6.1.1 Commit Message Structure
+##### 6.1.1 Commit Message Structure
+
+To ensure code quality and maintainability, please adhere to the following coding standards:
+
+
+
+### 7. Contribute
 
 We welcome contributions! Here's how you can help:
 
