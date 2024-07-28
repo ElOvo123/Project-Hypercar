@@ -107,14 +107,38 @@ feat(aero): improve airflow efficiency in front spoiler
 
 To ensure code quality and maintainability, please adhere to the following coding standards:
 
-##### 6.1.1 Commit Message Structure
-##### 6.1.1 Commit Message Structure
-##### 6.1.1 Commit Message Structure
-##### 6.1.1 Commit Message Structure
+##### 6.2.1 General Guidelines
 
-To ensure code quality and maintainability, please adhere to the following coding standards:
+- **Follow the Google C++ Style Guide for C++ code.**
+- **Use descriptive variable and function names.**
+- **Write clear and concise comments where necessary.**
 
+##### 6.2.1 Formatting
 
+- **Indentation**: Use 4 spaces for indentation, no tabs.
+- **Line Length**: Limit lines to 80 characters.
+- **Braces**: Use K&R style for braces.
+
+```cpp
+if (condition) {
+    // code
+} else {
+    // code
+}
+```
+
+##### 6.2.1 Naming Conventions
+
+- **Classes and Structs**: Use PascalCase.
+- **Functions and Methods**: Use camelCase.
+- **Variables**: Use camelCase.
+- **Constants**: Use UPPER_SNAKE_CASE.
+
+##### 6.2.1 Code Review
+
+- **All code changes should be submitted through pull requests.**
+- **Pull requests should be reviewed by at least one other team member.**
+- **Ensure that all checks pass before merging.**
 
 ### 7. Contribute
 
