@@ -5,13 +5,13 @@ Welcome to the **Hypercar Project**! This DIY initiative is dedicated to enginee
 ## Table of Contents
 1. Project Overview
 2. Getting Started
-- Install Arduino CLI
-- Clone the Repository
-- Navigate to the Project Directory
-- Run the Project
+    - Install Arduino CLI
+    - Clone the Repository
+    - Navigate to the Project Directory
+    - Run the Project
 3. Standards
-- Commit Standards
-- Coding Standards
+    - Commit Standards
+    - Coding Standards
 4. Contribute
 
 ## Project Overview
