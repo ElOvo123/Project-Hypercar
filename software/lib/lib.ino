@@ -2,7 +2,7 @@
 #include "src/blinking_led/blinking_led.h"
 #include "src/task_scheduler/task_scheduler.h"
 
-BlinkingLed led1(LED_BUILTIN, LOW, 0, 1000);
+BlinkingLed led1(LED_BUILTIN, LOW);
 
 #define NUM_TASKS 3
 

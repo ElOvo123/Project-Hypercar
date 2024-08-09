@@ -1,8 +1,8 @@
 #include "blinking_led.h"
 #include <Arduino.h>
 
-BlinkingLed::BlinkingLed(int pin, bool state, unsigned long prevMillis, long blinkInterval)
-    : ledPin(pin), ledState(state), previousMillis(prevMillis), interval(blinkInterval) {
+BlinkingLed::BlinkingLed(int pin, bool state)
+    : ledPin(pin), ledState(state){
 }
 
 void BlinkingLed::setLedPin(int pin) {
@@ -12,16 +12,6 @@ void BlinkingLed::setLedPin(int pin) {
 
 void BlinkingLed::setLedState(bool state) {
     ledState = state;
-    return;
-}
-
-void BlinkingLed::setBlinkInterval(long blinkInterval) {
-    interval = blinkInterval;
-    return;
-}
-
-void BlinkingLed::setPreviousMillis(unsigned long millis) {
-    previousMillis = millis;
     return;
 }
 
@@ -35,17 +25,5 @@ void BlinkingLed::InitBlinkLed() {
 }
 
 void BlinkingLed::BlinkLed() {
-    unsigned long currentMillis = millis();
-
-    if (currentMillis - previousMillis >= interval) {
-        setPreviousMillis(currentMillis);
-
-        if (ledState == getLedState()) {
-            setLedState(HIGH);
-        } else {
-            setLedState(LOW);
-        }
-
-        digitalWrite(ledPin, ledState);
-    }
+    digitalWrite(ledPin, !ledState);
 }
