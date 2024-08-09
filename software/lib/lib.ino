@@ -11,5 +11,5 @@ void setup() {
 
 void loop() {
     led1.BlinkLed();
-    Serial.print("Welcome to the Hypercar Project");
+    Serial.println("Welcome to the Hypercar Project");
 }
