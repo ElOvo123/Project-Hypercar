@@ -17,11 +17,11 @@ float MathLib::Multiply(float a, float b) {
 }
 
 float MathLib::Divide(float a, float b) {
-    if (b != 0){
-        return a/b;
-    }else{
-        return 0;
-    }  
+  if (b != 0){
+    return a/b;
+  }else{
+    return 0;
+  }  
 }
 
 float MathLib::Sin(float angle) {
@@ -85,19 +85,19 @@ float MathLib::Ceil(float value) {
 }
 
 float MathLib::Min(float a, float b) {
-    if (a < b){
-        return a;
-    }else{
-        return b;
-    }   
+  if (a < b){
+    return a;
+  }else{
+    return b;
+  }   
 }
 
 float MathLib::Max(float a, float b) {
-    if (a > b){
-        return a;
-    }else{
-        return b;
-    }  
+  if (a > b){
+    return a;
+  }else{
+    return b;
+  }  
 }
 
 float MathLib::Abs(float value) {

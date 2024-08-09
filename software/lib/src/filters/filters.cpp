@@ -6,9 +6,11 @@ Filters::Filters() {
 
 float Filters::RunningAverage(float* values, int numValues) {
   float sum = 0;
+
   for (int i = 0; i < numValues; i++) {
     sum += values[i];
   }
+  
   return sum / numValues;
 }
 
