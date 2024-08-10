@@ -18,11 +18,13 @@ void TaskPrint() {
 
 void setup() {
     Serial.begin(9600);
-
     led1.InitBlinkLed();
 
     scheduler.AddTask(TaskBlinkLed1, 1000);
     scheduler.AddTask(TaskPrint, 2000);
+    
+    delay(5000);
+    scheduler.DisableTask(1);
 }
 
 void loop() {

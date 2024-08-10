@@ -9,6 +9,8 @@ public:
     ~TaskScheduler();
 
     void AddTask(TaskFunction function, unsigned long interval);
+    void EnableTask(int taskIndex);
+    void DisableTask(int taskIndex);
     void Run();
 
 private:
@@ -16,6 +18,7 @@ private:
         TaskFunction function;
         unsigned long interval;
         unsigned long lastRun;
+        bool enabled;  // New flag to indicate if the task is enabled
     };
 
     Task* tasks;
