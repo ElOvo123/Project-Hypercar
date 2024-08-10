@@ -18,7 +18,7 @@ private:
         TaskFunction function;
         unsigned long interval;
         unsigned long lastRun;
-        bool enabled;  // New flag to indicate if the task is enabled
+        bool enabled;
     };
 
     Task* tasks;

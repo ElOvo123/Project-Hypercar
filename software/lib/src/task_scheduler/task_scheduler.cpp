@@ -14,7 +14,7 @@ void TaskScheduler::AddTask(TaskFunction function, unsigned long interval) {
     tasks[numTasks].function = function;
     tasks[numTasks].interval = interval;
     tasks[numTasks].lastRun = 0;
-    tasks[numTasks].enabled = true;  // Enable the task by default
+    tasks[numTasks].enabled = true;
     numTasks++;
   }
 }
