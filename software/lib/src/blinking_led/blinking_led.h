@@ -4,7 +4,7 @@
 class BlinkingLed {
 private:
     int ledPin;
-    int ledState;
+    bool ledState;
 
     void setLedPin(int pin);
     void setLedState(bool state);

@@ -1,12 +1,14 @@
 #include <Arduino.h>
+#include "src/blinking_led/blinking_led.h"
 #include "src/task_scheduler/task_scheduler.h"
 
 #define NUM_TASKS 5
 
 TaskScheduler scheduler(NUM_TASKS);
+BlinkingLed led1(LED_BUILTIN, false);
 
 bool TaskBlinkLed1() {
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    led1.BlinkLed();
     return true;
 }
 
@@ -26,7 +28,8 @@ bool TaskEventCheck() {
 
 void setup() {
     Serial.begin(9600);
-    pinMode(LED_BUILTIN, OUTPUT);
+    
+    led1.InitBlinkLed();
 
     scheduler.AddTask(TaskBlinkLed1, 1000, 2, false);
     scheduler.AddTask(TaskPrint, 2000, 1, true);
