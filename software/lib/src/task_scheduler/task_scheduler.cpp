@@ -156,19 +156,19 @@ void TaskScheduler::Run() {
         if (!success) {
             tasks[i].errorCount++;
             if (tasks[i].fallbackFunction != nullptr) {
-                tasks[i].fallbackFunction();
+              tasks[i].fallbackFunction();
             }
             if (tasks[i].errorCount >= tasks[i].maxErrors) {
-                DisableTask(i);
+              DisableTask(i);
             }
         } else {
-            tasks[i].errorCount = 0;
+          tasks[i].errorCount = 0;
         }
 
         tasks[i].lastRun = currentMillis;
 
         if (tasks[i].oneTime) {
-            DisableTask(i);
+          DisableTask(i);
         }
       }
     }
