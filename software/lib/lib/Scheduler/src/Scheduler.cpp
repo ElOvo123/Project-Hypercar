@@ -1,7 +1,7 @@
 #include "Scheduler.h"
 #include "Arduino.h"
 
-scheduler::scheduler() : task_count(0){
+scheduler::scheduler(int retry_limit) : task_count(0), retry_limit(retry_limit){
 }
 
 scheduler::~scheduler(){
@@ -17,6 +17,10 @@ void scheduler::add_task_count(){
 
 void scheduler::set_task_function(int task, void (*task_function)()){
     task_list[task].task_function = task_function;
+}
+
+void scheduler::set_task_failure_procedure(int task, void (*task_failure_procedure)()){
+    task_list[task].task_failure_procedure = task_failure_procedure;
 }
 
 void scheduler::set_running_period(int task, unsigned long running_period){
@@ -56,9 +60,13 @@ void scheduler::retry_task(int task){
     {
         run_task(task);
     }else{
-        escalate_task_failure();
-        
+        set_task_state(task, TASK_FAILED);
+        escalate_task_failure(task);
     }
+}
+
+void scheduler::escalate_task_failure(int task){
+    task_list[task].task_failure_procedure();
 }
 
 unsigned long scheduler::get_current_time(){
@@ -97,10 +105,11 @@ task_state scheduler::get_task_state(int task){
     return task_list[task].current_state;
 }
 
-void scheduler::add_task(void (*task_function) (), unsigned long running_period, unsigned long priority, unsigned long max_execution_time){
+void scheduler::add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time){
     if (task_count < max_number_of_tasks)
     {
         set_task_function(task_count, task_function);
+        set_task_failure_procedure(task_count, task_failure_procedure);
         set_running_period(task_count, running_period);
         set_last_run_time(task_count, 0);
         set_priority(task_count, priority);
@@ -162,11 +171,9 @@ void scheduler::run(void){
         {
             if (get_number_of_failures(highest_priority_task) < retry_limit)
             {
-                
-
+                retry_task(highest_priority_task);
             }else{
                 set_task_state(highest_priority_task, TASK_FAILED);
-
             }
         }else{
             set_task_state(highest_priority_task, READY);

@@ -2,7 +2,11 @@
 #include <Scheduler.h>
 
 // Create a Scheduler object
-scheduler scheduler_main;
+scheduler scheduler_main(2);
+
+void task_failure_procedure(){
+  
+}
 
 // Define task functions
 void task_1() {
@@ -22,9 +26,9 @@ void setup() {
   Serial.begin(9600);
 
   // Add tasks to the scheduler
-  scheduler_main.add_task(task_1, 1000, 1); // Task 1, 1-second interval, priority 1
-  scheduler_main.add_task(task_2, 2000, 2); // Task 2, 2-second interval, priority 2
-  scheduler_main.add_task(task_3, 3000, 3); // Task 3, 3-second interval, priority 3
+  scheduler_main.add_task(task_1, task_failure_procedure, 1000, 1, 500); // Task 1, 1-second interval, priority 1
+  scheduler_main.add_task(task_2, task_failure_procedure, 2000, 2, 500); // Task 2, 2-second interval, priority 2
+  scheduler_main.add_task(task_3, task_failure_procedure, 3000, 3, 500); // Task 3, 3-second interval, priority 3
 }
 
 void loop() {

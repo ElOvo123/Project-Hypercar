@@ -6,21 +6,25 @@ enum task_state
     READY,
     RUNNING,
     BLOCKED,
-    SUSPENDED,
     TASK_FAILED
 };
 
 struct task_control_block
 {
     void (*task_function)();
+    void (*task_failure_procedure)();
+
     unsigned long running_period;
     unsigned long last_run_time;
-    int priority;
-    bool task_is_running;
-    task_state current_state;
     unsigned long delay_until_unblock;
     unsigned long max_execution_time;
+    
+    int priority;
     int failures;
+
+    bool task_is_running;
+    
+    task_state current_state;
 };
 
 class scheduler
@@ -35,6 +39,7 @@ private:
     void add_task_count(void);
 
     void set_task_function(int task, void (*task_function)());
+    void set_task_failure_procedure(int task, void (*task_failure_procedure)());
     void set_running_period(int task,unsigned long running_period);
     void set_last_run_time(int task, unsigned long last_run_time);
     void set_priority(int task, int priority);
@@ -44,6 +49,7 @@ private:
     void set_max_execution_time(int task, unsigned long max_execution_time);
     void set_number_failures(int task, int number_of_failures);
     void retry_task(int task);
+    void escalate_task_failure(int task);
 
     unsigned long get_current_time(void);
     unsigned long get_task_last_run_time(int task);
@@ -58,8 +64,8 @@ private:
     task_state get_task_state(int task);
 
 public:
-    scheduler(void);
-    void add_task(void (*task_function)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time);
+    scheduler(int retry_limit);
+    void add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time);
     void delay_task(int task, unsigned long delay_until_unblock);
     void run(void);
     ~scheduler(void);
