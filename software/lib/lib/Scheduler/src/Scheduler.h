@@ -81,6 +81,7 @@ public:
 
     bool is_task_valid(int task);
     bool get_is_task_running(int task);
+    bool remove_task(int task_id);
 
     task_state get_task_state(int task);
     
@@ -88,6 +89,7 @@ public:
     bool add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time);
     void delay_task(int task, unsigned long delay_until_unblock);
     void run(void);
+    void reset(void);
     ~scheduler(void);
 };
 

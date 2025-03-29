@@ -94,6 +94,21 @@ void test_retry_then_recovery()
     TEST_ASSERT_NOT_EQUAL(TASK_FAILED, s.get_task_state(0));
 }
 
+void test_null_task_function_does_not_crash() {
+    scheduler s(3);
+    
+    s.add_task(nullptr, dummyFailureProcedure, 1000, 1, 500);
+
+    s.set_task_state(0, READY);
+    s.set_last_run_time(0, 0);
+
+    while (s.get_current_time() < 1000) {}
+
+    s.run();
+
+    TEST_ASSERT_EQUAL(0, s.get_task_last_run_time(0));
+}
+
 
 void run_failure_tests() {
     RUN_TEST(test_task_retry);
@@ -101,4 +116,5 @@ void run_failure_tests() {
     RUN_TEST(test_escalate_failure_only_called_on_failure);
     RUN_TEST(test_retry_loop_does_not_hang);
     RUN_TEST(test_retry_then_recovery);
+    RUN_TEST(test_null_task_function_does_not_crash);
 }

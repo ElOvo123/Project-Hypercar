@@ -89,6 +89,39 @@ void test_run_with_no_tasks() {
     TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
 }
 
+void test_max_priority_task_runs_first() 
+{
+    scheduler s(3);
+
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, INT_MAX, 500);
+
+    s.set_task_state(0, READY);
+    s.set_task_state(1, READY);
+
+    while (s.get_current_time() < 1000) 
+    {
+
+    }
+
+    s.run();
+
+    TEST_ASSERT_EQUAL(0, s.get_task_last_run_time(0));
+
+    TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(1));
+}
+
+void test_scheduler_reset_clears_tasks() {
+    scheduler s(3);
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
+
+    TEST_ASSERT_EQUAL(1, s.get_current_number_of_tasks());
+
+    s.reset();
+
+    TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
+}
+
 void run_core_tests() {
     RUN_TEST(test_add_task);
     RUN_TEST(test_task_parameters);
@@ -97,4 +130,6 @@ void run_core_tests() {
     RUN_TEST(test_max_task_limit);
     RUN_TEST(test_mixed_ready_blocked_tasks);
     RUN_TEST(test_run_with_no_tasks);
+    RUN_TEST(test_max_priority_task_runs_first);
+    RUN_TEST(test_scheduler_reset_clears_tasks);
 }

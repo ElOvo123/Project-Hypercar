@@ -18,17 +18,24 @@ scheduler::scheduler(int retry_limit) : task_count(0), retry_limit(retry_limit){
 scheduler::~scheduler(){
 }
 
-bool scheduler::run_task(int task){
+bool scheduler::run_task(int task) {
     if (is_task_valid(task)) 
     {
-        task_list[task].task_function();
+        if (!task_list[task].task_function) 
+        {
+            return false;
+        }
 
+        task_list[task].task_function();
+        
         set_number_failures(task, INITIAL_FAILURES);
+
         return true;
     }
-    
-    return false; 
+
+    return false;
 }
+
 
 void scheduler::add_task_count(){
     task_count++;
@@ -327,24 +334,48 @@ void scheduler::run(void){
         }
     }
 
-    if (highest_priority_task != INVALID_TASK) 
-    {
-        set_last_run_time(highest_priority_task, current_time);
-        set_task_state(highest_priority_task, RUNNING);
-
-        lock_resource(highest_priority_task);
-        unsigned long start_time = get_current_time();
+    if (highest_priority_task != INVALID_TASK) {
+        get_current_time();
 
         bool success = run_task(highest_priority_task);
-        
-        unsigned long execution_time = get_current_time() - start_time;
-        unlock_resource(highest_priority_task);
 
-        if (execution_time > get_max_execution_time(highest_priority_task)) 
+        if (success) 
         {
-            retry_task(highest_priority_task);
-        } else if (success) {
+            set_last_run_time(highest_priority_task, current_time);
             set_task_state(highest_priority_task, READY);
+        } else {
+            set_task_state(highest_priority_task, TASK_FAILED);
         }
+
+        unlock_resource(highest_priority_task);
     }
+
+}
+
+void scheduler::reset(void) {
+    task_count = 0;
+
+    for (int i = 0; i < max_number_of_tasks; ++i) 
+    {
+        task_list[i] = task_control_block{};
+    }
+}
+
+bool scheduler::remove_task(int task_id) {
+
+    if (!is_task_valid(task_id))
+    {
+        return false;
+    } 
+
+    for (int i = task_id; i < task_count - 1; ++i) 
+    {
+        task_list[i] = task_list[i + 1];
+    }
+
+    task_list[task_count - 1] = task_control_block{};
+    
+    task_count--;
+    
+    return true;
 }

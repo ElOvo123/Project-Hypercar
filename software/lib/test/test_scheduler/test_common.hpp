@@ -11,6 +11,7 @@ void dummyTaskFunction();
 void dummyFailureProcedure();
 void mockFailure();
 
+void run_stress_tests();
 void run_core_tests();
 void run_timing_tests();
 void run_priority_tests();
