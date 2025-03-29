@@ -1,17 +1,23 @@
 #ifndef SCHEDULER_HPP
 #define SCHEDULER_HPP
 
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
+#include <stdio.h>
+#endif
+
 const int NO_PRIORITY = -1;
 const int INITIAL_FAILURES = 0;
 const int INVALID_TASK = -1;
 
-enum task_state
-{
-    READY,
-    RUNNING,
-    BLOCKED,
-    TASK_FAILED
+enum task_state {
+    READY = 0,
+    RUNNING = 1,
+    BLOCKED = 2,
+    TASK_FAILED = 3
 };
+
 
 struct task_control_block
 {
@@ -39,6 +45,8 @@ private:
     int task_count;
     int retry_limit;
     task_control_block task_list[max_number_of_tasks];
+
+public:
 
     bool run_task(int task);
     void add_task_count(void);
@@ -75,8 +83,7 @@ private:
     bool get_is_task_running(int task);
 
     task_state get_task_state(int task);
-
-public:
+    
     scheduler(int retry_limit);
     bool add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time);
     void delay_task(int task, unsigned long delay_until_unblock);

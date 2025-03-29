@@ -1,5 +1,36 @@
+#include <scheduler.h>
+
+#include <scheduler.h>
+
+#ifdef ARDUINO
 #include <Arduino.h>
-#include <Scheduler.h>
+#else
+#include <stdio.h>
+
+// Forward declarations for native
+void setup();
+void loop();
+
+// Mock Serial object for native
+class DummySerial {
+public:
+    void begin(int) {}
+
+    void println(const char* msg) {
+        printf("%s\n", msg);
+    }
+
+    void println(int value) {
+        printf("%d\n", value);
+    }
+
+    void println(double value) {
+        printf("%f\n", value);
+    }
+};
+
+DummySerial Serial;
+#endif
 
 // Create a Scheduler object
 scheduler scheduler_main(2);
@@ -35,3 +66,16 @@ void loop() {
   // Run the scheduler to execute tasks as needed
   scheduler_main.run();
 }
+
+#ifndef ARDUINO
+#include <chrono>
+#include <thread>
+
+int main() {
+    setup();
+    while (true) {
+        loop();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Simulate a ~100Hz loop
+    }
+}
+#endif

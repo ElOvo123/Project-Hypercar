@@ -1,5 +1,16 @@
-#include "Scheduler.h"
-#include "Arduino.h"
+#include "scheduler.h"
+
+#ifndef ARDUINO
+#include <chrono>
+
+unsigned long millis() {
+    static auto start_time = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time);
+    return duration.count();
+}
+#endif
+
 
 scheduler::scheduler(int retry_limit) : task_count(0), retry_limit(retry_limit){
 }
@@ -66,11 +77,12 @@ void scheduler::set_task_is_running(int task, bool task_is_running){
 }
 
 void scheduler::set_task_state(int task, task_state current_state){
-    if (is_task_valid(task))
+    if (is_task_valid(task)) 
     {
         task_list[task].current_state = current_state;
     }
 }
+
 
 void scheduler::set_delay_until_unblock(int task, unsigned long delay_until_unblock){
     if (is_task_valid(task))
@@ -101,21 +113,35 @@ void scheduler::set_original_priority(int task, int original_priority){
 }
 
 void scheduler::retry_task(int task){
-    if (get_number_of_failures(task) < retry_limit)
+    if (!is_task_valid(task)) 
+    {
+        return;
+    }
+
+    if (get_number_of_failures(task) < retry_limit) 
     {
         run_task(task);
-    }else{
+    } else {
         set_task_state(task, TASK_FAILED);
         escalate_task_failure(task);
     }
 }
 
-void scheduler::escalate_task_failure(int task){
-    if (is_task_valid(task))
-    {
-        task_list[task].task_failure_procedure();
+
+void scheduler::escalate_task_failure(int task)
+{
+    if (!is_task_valid(task)) {
+        return;
     }
+
+    if (!task_list[task].task_failure_procedure) {
+        return;
+    }
+
+    task_list[task].task_failure_procedure();
 }
+
+
 
 void scheduler::lock_resource(int task){
     if (is_task_valid(task) && get_is_task_running(task)) 
@@ -134,12 +160,14 @@ void scheduler::lock_resource(int task){
 
 void scheduler::unlock_resource(int task){
     int original_priority = get_task_original_priority(task);
+
     if (original_priority != NO_PRIORITY) 
     {
         set_priority(task, original_priority);
         set_original_priority(task, NO_PRIORITY);
     }
 }
+
 
 unsigned long scheduler::get_current_time(){
     return millis();
@@ -235,34 +263,40 @@ bool scheduler::get_is_task_running(int task){
 }
 
 task_state scheduler::get_task_state(int task){
-    if (is_task_valid(task))
+    if (!is_task_valid(task)) 
     {
-        return task_list[task].current_state;
-    }else{
         return BLOCKED;
     }
+
+    return task_list[task].current_state;
 }
 
-bool scheduler::add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time){
-    if (get_current_number_of_tasks() < get_max_number_of_tasks())
+
+bool scheduler::add_task(void (*task_function)(), void (*task_failure_procedure)(), unsigned long running_period, unsigned long priority, unsigned long max_execution_time) {
+
+    if (task_count >= max_number_of_tasks) 
     {
-        set_task_function(task_count, task_function);
-        set_task_failure_procedure(task_count, task_failure_procedure);
-        set_running_period(task_count, running_period);
-        set_last_run_time(task_count, 0);
-        set_priority(task_count, priority);
-        set_task_is_running(task_count, false);
-        set_task_state(task_count, READY);
-        set_delay_until_unblock(task_count, 0);
-        set_number_failures(task_count, 0);
-        set_max_execution_time(task_count, max_execution_time);
-        set_original_priority(task_count, priority);
-        add_task_count();
-        return true;
-    }else{
         return false;
     }
+
+    int task = task_count;
+
+    task_list[task].task_function = task_function;
+    task_list[task].task_failure_procedure = task_failure_procedure;
+    task_list[task].running_period = running_period;
+    task_list[task].last_run_time = 0;
+    task_list[task].priority = priority;
+    task_list[task].task_is_running = false;
+    task_list[task].current_state = READY;
+    task_list[task].delay_until_unblock = 0;
+    task_list[task].failures = 0;
+    task_list[task].max_execution_time = max_execution_time;
+    task_list[task].original_priority = priority;
+
+    task_count++;
+    return true;
 }
+
 
 void scheduler::delay_task(int task, unsigned long delay_until_unblock){
     set_task_state(task, BLOCKED);
@@ -270,24 +304,31 @@ void scheduler::delay_task(int task, unsigned long delay_until_unblock){
 }
 
 void scheduler::run(void){
-     unsigned long current_time = get_current_time();
+    unsigned long current_time = get_current_time();
     int highest_priority_task = INVALID_TASK;
     int max_priority = NO_PRIORITY;
 
     for (int task = 0; task < task_count; task++) {
-        if (get_task_state(task) == BLOCKED && current_time >= get_delay_until_unblock(task)) {
+
+        if (get_task_state(task) == BLOCKED && current_time >= get_delay_until_unblock(task)) 
+        {
             set_task_state(task, READY);
         }
 
-        if (get_task_state(task) == READY &&
-            (current_time - get_task_last_run_time(task) >= get_task_running_period(task)) &&
-            get_task_priority(task) > max_priority) {
-            highest_priority_task = task;
-            max_priority = get_task_priority(task);
+        if (get_task_state(task) == READY && (current_time - get_task_last_run_time(task) >= get_task_running_period(task)))
+        {
+            
+            int priority = get_task_priority(task);
+            if (highest_priority_task == INVALID_TASK || priority > max_priority) 
+            {
+                highest_priority_task = task;
+                max_priority = priority;
+            }
         }
     }
 
-    if (highest_priority_task != INVALID_TASK) {
+    if (highest_priority_task != INVALID_TASK) 
+    {
         set_last_run_time(highest_priority_task, current_time);
         set_task_state(highest_priority_task, RUNNING);
 
@@ -299,7 +340,8 @@ void scheduler::run(void){
         unsigned long execution_time = get_current_time() - start_time;
         unlock_resource(highest_priority_task);
 
-        if (execution_time > get_max_execution_time(highest_priority_task)) {
+        if (execution_time > get_max_execution_time(highest_priority_task)) 
+        {
             retry_task(highest_priority_task);
         } else if (success) {
             set_task_state(highest_priority_task, READY);
