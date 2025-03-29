@@ -116,6 +116,36 @@ void test_run_does_nothing_when_no_tasks_ready() {
     TEST_ASSERT_EQUAL(before, after);
 }
 
+void test_task_can_be_reset_and_reused() {
+    scheduler s(3);
+    
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
+    
+    s.set_task_state(0, TASK_FAILED);
+    s.set_task_state(0, READY);
+    
+    s.set_number_failures(0, 0);
+    
+    s.run();
+    
+    TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
+}
+
+void test_failure_procedure_is_isolated() {
+    scheduler s(3);
+    
+    s.add_task(dummyTaskFunction, mockFailure, 1000, 1, 500);
+    
+    failure_called = false;
+    
+    s.set_number_failures(0, 5);
+    
+    s.retry_task(0);
+
+    TEST_ASSERT_TRUE(failure_called);
+    TEST_ASSERT_TRUE(s.is_task_valid(0));
+}
+
 void run_edge_case_tests() {
     RUN_TEST(test_delay_prevents_early_run);
     RUN_TEST(test_double_unlock_restores_priority_once);
@@ -124,4 +154,6 @@ void run_edge_case_tests() {
     RUN_TEST(test_blocked_task_does_not_run_even_if_high_priority);
     RUN_TEST(test_priority_restoration_on_unlock_only_once);
     RUN_TEST(test_run_does_nothing_when_no_tasks_ready);
+    RUN_TEST(test_task_can_be_reset_and_reused);
+    RUN_TEST(test_failure_procedure_is_isolated);
 }

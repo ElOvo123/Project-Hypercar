@@ -83,10 +83,50 @@ void test_get_current_time_increases() {
     TEST_ASSERT_TRUE(t2 > t1);
 }
 
+void test_task_period_not_elapsed_skips_execution() {
+    scheduler s(3);
+    
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
+    
+    s.set_task_state(0, READY);
+    
+    s.run();
+
+    unsigned long first_run = s.get_task_last_run_time(0);
+    
+    s.run();
+
+    TEST_ASSERT_EQUAL(first_run, s.get_task_last_run_time(0));
+}
+
+void test_multiple_tasks_unblock_simultaneously() {
+    scheduler s(3);
+
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 2, 500);
+
+    s.delay_task(0, 1000);
+    s.delay_task(1, 1000);
+
+    unsigned long unblock_time = s.get_delay_until_unblock(0);
+
+    while (s.get_current_time() < unblock_time) 
+    {
+
+    }
+
+    s.run();
+
+    TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
+    TEST_ASSERT_EQUAL(READY, s.get_task_state(1));
+}
+
 void run_timing_tests() {
     RUN_TEST(test_delay_and_unblock);
     RUN_TEST(test_task_execution_timing);
     RUN_TEST(test_task_unblocks_exactly_on_time);
     RUN_TEST(test_task_runs_again_after_period);
     RUN_TEST(test_get_current_time_increases);
+    RUN_TEST(test_task_period_not_elapsed_skips_execution);
+    RUN_TEST(test_multiple_tasks_unblock_simultaneously);
 }
