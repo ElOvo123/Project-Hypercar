@@ -99,4 +99,5 @@ void run_stress_tests(void){
     RUN_TEST(test_stress_rapid_execution);
     RUN_TEST(test_stress_starvation_check);
     RUN_TEST(test_stress_mass_block_unblock);
+    RUN_TEST(test_scheduler_with_random_tasks);
 }
