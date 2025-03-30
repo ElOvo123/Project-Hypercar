@@ -379,3 +379,66 @@ bool scheduler::remove_task(int task_id) {
     
     return true;
 }
+
+void scheduler::promote_task_priority(int task_id, int new_priority) {
+    if (is_task_valid(task_id)) 
+    {
+        if (new_priority > get_task_priority(task_id)) 
+        {
+            set_priority(task_id, new_priority);
+        }
+    }
+}
+
+void scheduler::preempt_running_task(int new_task_id) {
+    if (!is_task_valid(new_task_id)) 
+    {
+        return;
+    }
+
+    int current_running = INVALID_TASK;
+
+    for (int i = 0; i < task_count; ++i) 
+    {
+        if (task_list[i].current_state == RUNNING) 
+        {
+            current_running = i;
+            break;
+        }
+    }
+
+    if (current_running != INVALID_TASK && get_task_priority(new_task_id) > get_task_priority(current_running)) 
+    {
+        set_task_state(current_running, READY);
+        set_task_state(new_task_id, RUNNING);
+        set_last_run_time(new_task_id, get_current_time());
+    }
+}
+
+bool scheduler::run_interrupt_safe(void) {
+    int task_to_run = INVALID_TASK;
+    unsigned long now = get_current_time();
+    int max_priority = NO_PRIORITY;
+
+    for (int i = 0; i < task_count; ++i) 
+    {
+        if (task_list[i].current_state == READY && now - task_list[i].last_run_time >= task_list[i].running_period && task_list[i].priority > max_priority) 
+        {
+            task_to_run = i;
+            max_priority = task_list[i].priority;
+        }
+    }
+
+    if (task_to_run == INVALID_TASK)
+    {
+        return false;
+    }
+
+    set_last_run_time(task_to_run, now);
+    task_list[task_to_run].current_state = RUNNING;
+    
+    run_task(task_to_run);
+    task_list[task_to_run].current_state = READY;
+
+    return true;
+}

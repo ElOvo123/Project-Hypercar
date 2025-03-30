@@ -66,6 +66,8 @@ public:
     void escalate_task_failure(int task);
     void lock_resource(int task);
     void unlock_resource(int task);
+    void promote_task_priority(int task_id, int new_priority);
+    void preempt_running_task(int new_task_id);
 
     unsigned long get_current_time(void);
     unsigned long get_task_last_run_time(int task);
@@ -82,6 +84,7 @@ public:
     bool is_task_valid(int task);
     bool get_is_task_running(int task);
     bool remove_task(int task_id);
+    bool run_interrupt_safe(void);
 
     task_state get_task_state(int task);
     

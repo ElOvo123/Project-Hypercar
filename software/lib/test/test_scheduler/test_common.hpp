@@ -18,5 +18,8 @@ void run_priority_tests(void);
 void run_failure_tests(void);
 void run_edge_case_tests(void);
 void run_utility_tests(void);
+void run_dynamic_tests(void);
+void run_preempt_tests(void);
+void run_interrupt_tests(void);
 
 #endif

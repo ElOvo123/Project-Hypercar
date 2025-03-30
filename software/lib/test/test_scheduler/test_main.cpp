@@ -24,5 +24,8 @@ int main() {
     run_edge_case_tests();
     run_stress_tests();
     run_utility_tests();
+    run_dynamic_tests();
+    run_preempt_tests();
+    run_interrupt_tests();
     return UNITY_END();
 }
