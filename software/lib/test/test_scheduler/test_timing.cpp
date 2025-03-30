@@ -1,6 +1,6 @@
 #include "test_common.hpp"
 
-void test_delay_and_unblock() {
+void test_delay_and_unblock(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -18,7 +18,7 @@ void test_delay_and_unblock() {
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
-void test_task_execution_timing() {
+void test_task_execution_timing(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -33,7 +33,7 @@ void test_task_execution_timing() {
     TEST_ASSERT_EQUAL(last, s.get_task_last_run_time(0));
 }
 
-void test_task_unblocks_exactly_on_time() {
+void test_task_unblocks_exactly_on_time(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -49,7 +49,7 @@ void test_task_unblocks_exactly_on_time() {
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
-void test_task_runs_again_after_period() {
+void test_task_runs_again_after_period(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 500, 2, 500);
@@ -69,7 +69,7 @@ void test_task_runs_again_after_period() {
     TEST_ASSERT_TRUE(s.get_task_last_run_time(0) > first);
 }
 
-void test_get_current_time_increases() {
+void test_get_current_time_increases(void) {
     scheduler s(3);
 
     unsigned long t1 = s.get_current_time();
@@ -83,7 +83,7 @@ void test_get_current_time_increases() {
     TEST_ASSERT_TRUE(t2 > t1);
 }
 
-void test_task_period_not_elapsed_skips_execution() {
+void test_task_period_not_elapsed_skips_execution(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -99,7 +99,7 @@ void test_task_period_not_elapsed_skips_execution() {
     TEST_ASSERT_EQUAL(first_run, s.get_task_last_run_time(0));
 }
 
-void test_multiple_tasks_unblock_simultaneously() {
+void test_multiple_tasks_unblock_simultaneously(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -121,7 +121,7 @@ void test_multiple_tasks_unblock_simultaneously() {
     TEST_ASSERT_EQUAL(READY, s.get_task_state(1));
 }
 
-void test_zero_running_period() {
+void test_zero_running_period(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 0, 1, 500);
@@ -133,7 +133,7 @@ void test_zero_running_period() {
     TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(0));
 }
 
-void test_redundant_delay_call() {
+void test_redundant_delay_call(void) {
     scheduler s(3);
 
     
@@ -150,7 +150,7 @@ void test_redundant_delay_call() {
     TEST_ASSERT_TRUE(updated_unblock > first_unblock);
 }
 
-void run_timing_tests() {
+void run_timing_tests(void) {
     RUN_TEST(test_delay_and_unblock);
     RUN_TEST(test_task_execution_timing);
     RUN_TEST(test_task_unblocks_exactly_on_time);

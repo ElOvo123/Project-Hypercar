@@ -2,16 +2,16 @@
 
 bool failure_called = false;
 
-void dummyTaskFunction() {
+void dummyTaskFunction(void) {
 
 }
 
-void dummyFailureProcedure() {
+void dummyFailureProcedure(void) {
     printf("[dummyFailureProcedure] Called!\n");
     fflush(stdout);
 }
 
-void mockFailure() {
+void mockFailure(void) {
     failure_called = true;
 }
 
@@ -23,5 +23,6 @@ int main() {
     run_failure_tests();
     run_edge_case_tests();
     run_stress_tests();
+    run_utility_tests();
     return UNITY_END();
 }

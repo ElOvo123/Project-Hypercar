@@ -1,6 +1,6 @@
 #include "test_common.hpp"
 
-void test_stress_rapid_execution() {
+void test_stress_rapid_execution(void) {
     scheduler s(3);
 
     const int max = s.get_max_number_of_tasks();
@@ -25,7 +25,7 @@ void test_stress_rapid_execution() {
     }
 }
 
-void test_stress_starvation_check() {
+void test_stress_starvation_check(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 10, 10, 10);
@@ -44,7 +44,7 @@ void test_stress_starvation_check() {
     TEST_ASSERT_TRUE(s.get_task_last_run_time(1) > 0);
 }
 
-void test_stress_mass_block_unblock() {
+void test_stress_mass_block_unblock(void) {
     scheduler s(3);
 
     const int max = s.get_max_number_of_tasks();
@@ -77,7 +77,7 @@ void test_stress_mass_block_unblock() {
 
 }
 
-void run_stress_tests(){
+void run_stress_tests(void){
     RUN_TEST(test_stress_rapid_execution);
     RUN_TEST(test_stress_starvation_check);
     RUN_TEST(test_stress_mass_block_unblock);

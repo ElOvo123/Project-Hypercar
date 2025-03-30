@@ -2,10 +2,10 @@
 
 int task_executed_id = -1;
 
-void traceableTask0() { task_executed_id = 0; }
-void traceableTask1() { task_executed_id = 1; }
+void traceableTask0(void) { task_executed_id = 0; }
+void traceableTask1(void) { task_executed_id = 1; }
 
-void test_locking_unlocking() {
+void test_locking_unlocking(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -22,7 +22,7 @@ void test_locking_unlocking() {
     TEST_ASSERT_EQUAL(1, s.get_task_priority(0));
 }
 
-void test_run_selects_highest_priority_ready() {
+void test_run_selects_highest_priority_ready(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -48,7 +48,7 @@ void test_run_selects_highest_priority_ready() {
     TEST_ASSERT_TRUE(task0_last_run == 0);
 }
 
-void test_multiple_ready_tasks_same_priority() {
+void test_multiple_ready_tasks_same_priority(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 3, 500);
@@ -70,7 +70,7 @@ void test_multiple_ready_tasks_same_priority() {
     TEST_ASSERT_TRUE((t0 > 0 && t1 == 0) || (t1 > 0 && t0 == 0));
 }
 
-void test_all_tasks_ready_highest_priority_runs() {
+void test_all_tasks_ready_highest_priority_runs(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -94,7 +94,7 @@ void test_all_tasks_ready_highest_priority_runs() {
     TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(1));
 }
 
-void test_only_one_task_runs_at_a_time() {
+void test_only_one_task_runs_at_a_time(void) {
     scheduler s(3);
     
     task_executed_id = -1;
@@ -115,7 +115,7 @@ void test_only_one_task_runs_at_a_time() {
     TEST_ASSERT_TRUE(task_executed_id == 0 || task_executed_id == 1);
 }
 
-void test_priority_inheritance_only_when_running() {
+void test_priority_inheritance_only_when_running(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -129,7 +129,7 @@ void test_priority_inheritance_only_when_running() {
 }
 
 
-void run_priority_tests() {
+void run_priority_tests(void) {
     RUN_TEST(test_locking_unlocking);
     RUN_TEST(test_run_selects_highest_priority_ready);
     RUN_TEST(test_multiple_ready_tasks_same_priority);

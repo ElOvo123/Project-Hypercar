@@ -1,6 +1,15 @@
 #include "test_common.hpp"
 
-void test_task_retry() {
+int failure_counter = 0;
+
+void flakyTask(void) {
+    if (++failure_counter < 2) 
+    {
+
+    }
+}
+
+void test_task_retry(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -12,7 +21,7 @@ void test_task_retry() {
     TEST_ASSERT_EQUAL(TASK_FAILED, s.get_task_state(0));
 }
 
-void test_retry_until_limit_then_fail() {
+void test_retry_until_limit_then_fail(void) {
     scheduler s(2);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -36,7 +45,7 @@ void test_retry_until_limit_then_fail() {
     TEST_ASSERT_EQUAL(TASK_FAILED, s.get_task_state(0));
 }
 
-void test_escalate_failure_only_called_on_failure() {
+void test_escalate_failure_only_called_on_failure(void) {
     scheduler s(2);
     
     s.add_task(dummyTaskFunction, mockFailure, 1000, 1, 500);
@@ -56,7 +65,7 @@ void test_escalate_failure_only_called_on_failure() {
     TEST_ASSERT_TRUE(failure_called);
 }
 
-void test_retry_loop_does_not_hang() {
+void test_retry_loop_does_not_hang(void) {
     scheduler s(2);
 
     
@@ -72,16 +81,7 @@ void test_retry_loop_does_not_hang() {
     }
 }
 
-int failure_counter = 0;
-
-void flakyTask() {
-    if (++failure_counter < 2) 
-    {
-
-    }
-}
-
-void test_retry_then_recovery() 
+void test_retry_then_recovery(void) 
 {
     scheduler s(3);
     
@@ -94,7 +94,7 @@ void test_retry_then_recovery()
     TEST_ASSERT_NOT_EQUAL(TASK_FAILED, s.get_task_state(0));
 }
 
-void test_null_task_function_does_not_crash() {
+void test_null_task_function_does_not_crash(void) {
     scheduler s(3);
     
     s.add_task(nullptr, dummyFailureProcedure, 1000, 1, 500);
@@ -109,12 +109,25 @@ void test_null_task_function_does_not_crash() {
     TEST_ASSERT_EQUAL(0, s.get_task_last_run_time(0));
 }
 
+void test_null_failure_procedure_does_not_crash(void) {
+    scheduler s(3);
 
-void run_failure_tests() {
+    s.add_task(dummyTaskFunction, nullptr, 1000, 1, 500);
+
+    s.set_number_failures(0, 3);
+    
+    s.retry_task(0);
+
+    TEST_ASSERT_TRUE(true);
+}
+
+
+void run_failure_tests(void) {
     RUN_TEST(test_task_retry);
     RUN_TEST(test_retry_until_limit_then_fail);
     RUN_TEST(test_escalate_failure_only_called_on_failure);
     RUN_TEST(test_retry_loop_does_not_hang);
     RUN_TEST(test_retry_then_recovery);
     RUN_TEST(test_null_task_function_does_not_crash);
+    RUN_TEST(test_null_failure_procedure_does_not_crash);
 }

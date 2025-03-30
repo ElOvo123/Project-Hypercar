@@ -1,6 +1,6 @@
 #include "test_common.hpp"
 
-void test_delay_prevents_early_run() {
+void test_delay_prevents_early_run(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -12,7 +12,7 @@ void test_delay_prevents_early_run() {
     TEST_ASSERT_EQUAL(BLOCKED, s.get_task_state(0));
 }
 
-void test_double_unlock_restores_priority_once() {
+void test_double_unlock_restores_priority_once(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -28,7 +28,7 @@ void test_double_unlock_restores_priority_once() {
     TEST_ASSERT_EQUAL(1, s.get_task_priority(0));
 }
 
-void test_task_reset_after_failure() {
+void test_task_reset_after_failure(void) {
     scheduler s(2);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -42,7 +42,7 @@ void test_task_reset_after_failure() {
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
-void test_task_starvation_prevention_basic() {
+void test_task_starvation_prevention_basic(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 10, 500);
@@ -65,7 +65,7 @@ void test_task_starvation_prevention_basic() {
     TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(1));
 }
 
-void test_blocked_task_does_not_run_even_if_high_priority() {
+void test_blocked_task_does_not_run_even_if_high_priority(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 5, 500);
@@ -80,7 +80,7 @@ void test_blocked_task_does_not_run_even_if_high_priority() {
     TEST_ASSERT_EQUAL(0, s.get_task_last_run_time(0));
 }
 
-void test_priority_restoration_on_unlock_only_once() {
+void test_priority_restoration_on_unlock_only_once(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 2, 500);
@@ -98,7 +98,7 @@ void test_priority_restoration_on_unlock_only_once() {
     TEST_ASSERT_EQUAL(2, s.get_task_priority(0));
 }
 
-void test_run_does_nothing_when_no_tasks_ready() {
+void test_run_does_nothing_when_no_tasks_ready(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -116,7 +116,7 @@ void test_run_does_nothing_when_no_tasks_ready() {
     TEST_ASSERT_EQUAL(before, after);
 }
 
-void test_task_can_be_reset_and_reused() {
+void test_task_can_be_reset_and_reused(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -131,7 +131,7 @@ void test_task_can_be_reset_and_reused() {
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
-void test_failure_procedure_is_isolated() {
+void test_failure_procedure_is_isolated(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, mockFailure, 1000, 1, 500);
@@ -146,7 +146,7 @@ void test_failure_procedure_is_isolated() {
     TEST_ASSERT_TRUE(s.is_task_valid(0));
 }
 
-void run_edge_case_tests() {
+void run_edge_case_tests(void) {
     RUN_TEST(test_delay_prevents_early_run);
     RUN_TEST(test_double_unlock_restores_priority_once);
     RUN_TEST(test_task_reset_after_failure);

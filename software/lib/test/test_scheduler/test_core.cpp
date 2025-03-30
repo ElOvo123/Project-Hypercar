@@ -1,6 +1,6 @@
 #include "test_common.hpp"
 
-void test_add_task() {
+void test_add_task(void) {
     scheduler s(3);
 
     TEST_ASSERT_TRUE(s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500));
@@ -8,7 +8,7 @@ void test_add_task() {
     TEST_ASSERT_EQUAL(1, s.get_current_number_of_tasks());
 }
 
-void test_task_parameters() {
+void test_task_parameters(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -22,7 +22,7 @@ void test_task_parameters() {
     TEST_ASSERT_EQUAL(300, s.get_max_execution_time(0));
 }
 
-void test_task_parameters_update_correctly() {
+void test_task_parameters_update_correctly(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -34,7 +34,7 @@ void test_task_parameters_update_correctly() {
     TEST_ASSERT_EQUAL(7, s.get_task_priority(0));
 }
 
-void test_invalid_task_access_is_safe() {
+void test_invalid_task_access_is_safe(void) {
     scheduler s(3);
 
     TEST_ASSERT_FALSE(s.is_task_valid(-1));
@@ -43,7 +43,7 @@ void test_invalid_task_access_is_safe() {
     TEST_ASSERT_EQUAL(0, s.get_task_priority(999));
 }
 
-void test_max_task_limit() {
+void test_max_task_limit(void) {
     scheduler s(3);
     
     int max = s.get_max_number_of_tasks();
@@ -56,7 +56,7 @@ void test_max_task_limit() {
     TEST_ASSERT_FALSE(s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500));
 }
 
-void test_mixed_ready_blocked_tasks() {
+void test_mixed_ready_blocked_tasks(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 3, 500);
@@ -81,7 +81,7 @@ void test_mixed_ready_blocked_tasks() {
     TEST_ASSERT_NOT_EQUAL(0, run_time_1);
 }
 
-void test_run_with_no_tasks() {
+void test_run_with_no_tasks(void) {
     scheduler s(3);
     
     s.run();
@@ -89,8 +89,7 @@ void test_run_with_no_tasks() {
     TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
 }
 
-void test_max_priority_task_runs_first() 
-{
+void test_max_priority_task_runs_first(void) {
     scheduler s(3);
 
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
@@ -111,7 +110,7 @@ void test_max_priority_task_runs_first()
     TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(1));
 }
 
-void test_scheduler_reset_clears_tasks() {
+void test_scheduler_reset_clears_tasks(void) {
     scheduler s(3);
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
 
@@ -122,7 +121,7 @@ void test_scheduler_reset_clears_tasks() {
     TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
 }
 
-void test_rescheduling_after_delay() {
+void test_rescheduling_after_delay(void) {
     scheduler s(3);
     
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 500, 2, 500);
@@ -154,7 +153,7 @@ void test_rescheduling_after_delay() {
     TEST_ASSERT_TRUE(s.get_task_last_run_time(0) > 0);
 }
 
-void run_core_tests() {
+void run_core_tests(void) {
     RUN_TEST(test_add_task);
     RUN_TEST(test_task_parameters);
     RUN_TEST(test_task_parameters_update_correctly);
