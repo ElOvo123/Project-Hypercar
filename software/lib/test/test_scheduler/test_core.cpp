@@ -122,6 +122,38 @@ void test_scheduler_reset_clears_tasks() {
     TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
 }
 
+void test_rescheduling_after_delay() {
+    scheduler s(3);
+    
+    s.add_task(dummyTaskFunction, dummyFailureProcedure, 500, 2, 500);
+
+    s.set_task_state(0, READY);
+    
+    s.delay_task(0, 200);
+
+    unsigned long unblock_time = s.get_delay_until_unblock(0);
+
+    while (s.get_current_time() < unblock_time) 
+    {
+
+    }
+    
+    s.run();
+
+    s.delay_task(0, 300);
+
+    unblock_time = s.get_delay_until_unblock(0);
+    
+    while (s.get_current_time() < unblock_time) 
+    {
+
+    }
+    
+    s.run();
+
+    TEST_ASSERT_TRUE(s.get_task_last_run_time(0) > 0);
+}
+
 void run_core_tests() {
     RUN_TEST(test_add_task);
     RUN_TEST(test_task_parameters);
@@ -132,4 +164,5 @@ void run_core_tests() {
     RUN_TEST(test_run_with_no_tasks);
     RUN_TEST(test_max_priority_task_runs_first);
     RUN_TEST(test_scheduler_reset_clears_tasks);
+    RUN_TEST(test_rescheduling_after_delay);
 }
