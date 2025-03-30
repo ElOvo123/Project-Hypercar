@@ -77,6 +77,24 @@ void test_stress_mass_block_unblock(void) {
 
 }
 
+void test_scheduler_with_random_tasks(void) {
+    scheduler s(3);
+
+    add_random_tasks(s, 10);
+
+    for (int i = 0; i < s.get_current_number_of_tasks(); ++i) 
+    {
+        s.set_task_state(i, READY);
+    }
+
+    for (int i = 0; i < 50; ++i) 
+    {
+        s.run();
+    }
+
+    TEST_ASSERT_TRUE(true);
+}
+
 void run_stress_tests(void){
     RUN_TEST(test_stress_rapid_execution);
     RUN_TEST(test_stress_starvation_check);

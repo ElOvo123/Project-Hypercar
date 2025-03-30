@@ -1,8 +1,35 @@
 #include "test_common.hpp"
 
+#include <cstdlib>
+#include <ctime>
+#include <scheduler.h>
+
+void seed_random(void) {
+    static bool seeded = false;
+    
+    if (!seeded) 
+    {
+        std::srand(static_cast<unsigned>(std::time(nullptr)));
+        seeded = true;
+    }
+}
+
+void add_random_tasks(scheduler& s, int count) {
+    seed_random();
+
+    for (int i = 0; i < count; ++i) 
+    {
+        unsigned long period = 100 + (std::rand() % 1000);
+        int priority = 1 + (std::rand() % 10);
+        unsigned long max_time = 100 + (std::rand() % 500);
+
+        s.add_task(dummyTaskFunction, dummyFailureProcedure, period, priority, max_time);
+    }
+}
+
 void test_remove_invalid_task(void) {
     scheduler s(3);
-    
+
     TEST_ASSERT_FALSE(s.remove_task(-1));
     TEST_ASSERT_FALSE(s.remove_task(999));
 }

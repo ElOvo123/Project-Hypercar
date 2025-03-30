@@ -10,6 +10,8 @@ extern bool failure_called;
 void dummyTaskFunction(void);
 void dummyFailureProcedure(void);
 void mockFailure(void);
+void add_random_tasks(scheduler &s, int count);
+void seed_random(void);
 
 void run_stress_tests(void);
 void run_core_tests(void);
