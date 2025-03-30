@@ -29,14 +29,17 @@ void add_random_tasks(scheduler& s, int count) {
 
 void add_mixed_state_tasks(scheduler& s, int count) {
     seed_random();
-    for (int i = 0; i < count; ++i) {
+
+    for (int i = 0; i < count; ++i) 
+    {
         unsigned long period = 100 + (std::rand() % 1000);
         int priority = 1 + (std::rand() % 10);
         unsigned long max_time = 100 + (std::rand() % 500);
 
         s.add_task(dummyTaskFunction, dummyFailureProcedure, period, priority, max_time);
 
-        if (i % 2 == 0) {
+        if (i % 2 == 0) 
+        {
             s.set_task_state(i, READY);
         } else {
             s.set_task_state(i, BLOCKED);
