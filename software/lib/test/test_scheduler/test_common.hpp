@@ -12,6 +12,7 @@ void dummyFailureProcedure(void);
 void mockFailure(void);
 void add_random_tasks(scheduler &s, int count);
 void seed_random(void);
+void add_mixed_state_tasks(scheduler &s, int count);
 
 void run_stress_tests(void);
 void run_core_tests(void);

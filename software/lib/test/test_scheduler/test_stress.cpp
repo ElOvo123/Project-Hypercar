@@ -95,9 +95,60 @@ void test_scheduler_with_random_tasks(void) {
     TEST_ASSERT_TRUE(true);
 }
 
+void test_scheduler_mixed_blocked_ready(void) {
+    scheduler s(3);
+
+    add_mixed_state_tasks(s, 10);
+
+    for (int i = 0; i < 20; ++i) 
+    {
+        s.run();
+    }
+
+    TEST_ASSERT_TRUE(true);
+}
+
+void test_scheduler_random_task_unblock_over_time(void) {
+    scheduler s(3);
+
+    add_mixed_state_tasks(s, 10);
+
+    unsigned long wait_until = s.get_current_time() + 1500;
+
+    while (s.get_current_time() < wait_until) 
+    {
+        s.run();
+    }
+
+    TEST_ASSERT_TRUE(true);
+}
+
+void test_scheduler_random_stress_reset_and_reload(void) {
+    scheduler s(3);
+    
+    add_random_tasks(s, 10);
+
+    for (int i = 0; i < 20; ++i) 
+    {
+        s.run();
+    }
+
+    s.reset();
+
+    TEST_ASSERT_EQUAL(0, s.get_current_number_of_tasks());
+
+    add_random_tasks(s, 5);
+
+    TEST_ASSERT_EQUAL(5, s.get_current_number_of_tasks());
+}
+
+
 void run_stress_tests(void){
     RUN_TEST(test_stress_rapid_execution);
     RUN_TEST(test_stress_starvation_check);
     RUN_TEST(test_stress_mass_block_unblock);
     RUN_TEST(test_scheduler_with_random_tasks);
+    RUN_TEST(test_scheduler_mixed_blocked_ready);
+    RUN_TEST(test_scheduler_random_task_unblock_over_time);
+    RUN_TEST(test_scheduler_random_stress_reset_and_reload);
 }
