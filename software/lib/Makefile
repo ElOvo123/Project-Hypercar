@@ -32,9 +32,10 @@ upload-all:
 clean-all:
 	@$(PLATFORMIO) run --target clean
 
-test:
-	@echo "Running tests for environment: $(ENVIRONMENT)"
-	@$(PLATFORMIO) test -e $(ENVIRONMENT) --without-uploading
+test_native:
+	@echo "Running tests for environment: native"
+	@rm -rf logs/scheduler_log.csv
+	@$(PLATFORMIO) test -e native --without-uploading
 
 help:
 	@$(PLATFORMIO) run --help
