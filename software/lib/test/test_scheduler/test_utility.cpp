@@ -2,7 +2,16 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include <filesystem>
+#include <mutex>
 #include <scheduler.h>
+
+std::mutex log_mutex;
 
 void seed_random(void) {
     static bool seeded = false;
@@ -47,6 +56,26 @@ void add_mixed_state_tasks(scheduler& s, int count) {
         }
     }
 }
+
+unsigned long get_timestamp_ms() {
+    
+    auto now = std::chrono::steady_clock::now();
+    
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+
+    return static_cast<unsigned long>(ms);
+}
+
+void log_to_csv(int task_id, int priority, const char* event) {
+    std::ofstream file("logs/scheduler_log.csv", std::ios::app);
+
+    if (file.is_open()) 
+    {
+        file << get_timestamp_ms() << "," << task_id << "," << priority << "," << event << "\n";
+        file.close();
+    }
+}
+
 
 void test_remove_invalid_task(void) {
     scheduler s(3);

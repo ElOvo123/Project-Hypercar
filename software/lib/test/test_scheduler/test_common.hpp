@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <unity.h>
+#include <string>
 #include <scheduler.h>
 
 extern bool failure_called;
@@ -13,6 +14,7 @@ void mockFailure(void);
 void add_random_tasks(scheduler &s, int count);
 void seed_random(void);
 void add_mixed_state_tasks(scheduler &s, int count);
+void log_to_csv(int task_id, int priority, const char *event);
 
 void run_stress_tests(void);
 void run_core_tests(void);

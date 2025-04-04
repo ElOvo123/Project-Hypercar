@@ -15,6 +15,8 @@ void test_delay_and_unblock(void) {
     
     s.run();
     
+    log_to_csv(0, s.get_task_priority(0), "unblock");
+
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
@@ -26,9 +28,13 @@ void test_task_execution_timing(void) {
 
     s.run();
 
+    log_to_csv(0, s.get_task_priority(0), "run");
+
     unsigned long last = s.get_task_last_run_time(0);
     
     s.run();
+
+    log_to_csv(0, s.get_task_priority(0), "skipped");
 
     TEST_ASSERT_EQUAL(last, s.get_task_last_run_time(0));
 }
@@ -46,6 +52,8 @@ void test_task_unblocks_exactly_on_time(void) {
     
     s.run();
 
+    log_to_csv(0, s.get_task_priority(0), "unblock");
+
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
 }
 
@@ -56,6 +64,8 @@ void test_task_runs_again_after_period(void) {
     s.set_task_state(0, READY);
 
     s.run();
+
+    log_to_csv(0, s.get_task_priority(0), "run1");
     
     unsigned long first = s.get_task_last_run_time(0);
     
@@ -65,6 +75,8 @@ void test_task_runs_again_after_period(void) {
     }
     
     s.run();
+
+    log_to_csv(0, s.get_task_priority(0), "run2");
     
     TEST_ASSERT_TRUE(s.get_task_last_run_time(0) > first);
 }
@@ -80,6 +92,8 @@ void test_get_current_time_increases(void) {
     }
     unsigned long t2 = s.get_current_time();
 
+    log_to_csv(-1, -1, "time_tick");
+
     TEST_ASSERT_TRUE(t2 > t1);
 }
 
@@ -92,9 +106,13 @@ void test_task_period_not_elapsed_skips_execution(void) {
     
     s.run();
 
+    log_to_csv(0, s.get_task_priority(0), "run");
+
     unsigned long first_run = s.get_task_last_run_time(0);
     
     s.run();
+
+    log_to_csv(0, s.get_task_priority(0), "skipped");
 
     TEST_ASSERT_EQUAL(first_run, s.get_task_last_run_time(0));
 }
@@ -117,6 +135,9 @@ void test_multiple_tasks_unblock_simultaneously(void) {
 
     s.run();
 
+    log_to_csv(0, s.get_task_priority(0), "unblock");
+    log_to_csv(1, s.get_task_priority(1), "unblock");
+
     TEST_ASSERT_EQUAL(READY, s.get_task_state(0));
     TEST_ASSERT_EQUAL(READY, s.get_task_state(1));
 }
@@ -130,13 +151,14 @@ void test_zero_running_period(void) {
 
     s.run();
 
+    log_to_csv(0, s.get_task_priority(0), "zero_period");
+
     TEST_ASSERT_NOT_EQUAL(0, s.get_task_last_run_time(0));
 }
 
 void test_redundant_delay_call(void) {
     scheduler s(3);
 
-    
     s.add_task(dummyTaskFunction, dummyFailureProcedure, 1000, 1, 500);
     
     s.delay_task(0, 1000);
@@ -146,6 +168,8 @@ void test_redundant_delay_call(void) {
     s.delay_task(0, 2000);
     
     unsigned long updated_unblock = s.get_delay_until_unblock(0);
+
+    log_to_csv(0, s.get_task_priority(0), "delay_updated");
 
     TEST_ASSERT_TRUE(updated_unblock > first_unblock);
 }

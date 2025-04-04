@@ -7,8 +7,7 @@ void dummyTaskFunction(void) {
 }
 
 void dummyFailureProcedure(void) {
-    printf("[dummyFailureProcedure] Called!\n");
-    fflush(stdout);
+
 }
 
 void mockFailure(void) {
