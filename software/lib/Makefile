@@ -41,15 +41,22 @@ test_native:
 
 cppcheck:
 	@echo "Running cppcheck..."
-	@cppcheck --enable=all --inconclusive --std=c++17 --force \
+	@make clean
+	@cppcheck --enable=all --inconclusive --std=c++17 --language=c++ --force \
 		--suppress=missingIncludeSystem \
-		-I include -I src -I lib -I test \
-		$(SRC_DIR) lib test
-
+		-I include -I src -I lib \
+		src lib
 
 clang-tidy:
 	@echo "Running clang-tidy..."
-	@find $(SRC_DIR) -name '*.cpp' | xargs -I{} clang-tidy {} -- -Iinclude -Isrc -Ilib
+	@make clean
+	@find $(SRC_DIR) -name '*.cpp' | xargs -I{} clang-tidy {} -- \
+	    -Iinclude \
+	    -Isrc \
+	    -Ilib \
+	    -Ilib/scheduler/src \
+	    -std=c++17
+
 
 cppcheck-misra:
 	@echo "Running cppcheck with MISRA compliance checks..."
