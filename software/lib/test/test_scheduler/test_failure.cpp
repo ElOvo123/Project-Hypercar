@@ -129,6 +129,46 @@ void test_null_failure_procedure_does_not_crash(void) {
     TEST_ASSERT_TRUE(true);
 }
 
+bool handler_A_called = false;
+bool handler_B_called = false;
+
+void handler_A() {
+    handler_A_called = true;
+    log_to_csv(0, -1, "handler_A");
+}
+
+void handler_B() {
+    handler_B_called = true;
+    log_to_csv(0, -1, "handler_B");
+}
+
+void test_dynamic_failure_procedure_update(void) {
+    scheduler s(3);
+
+    s.add_task(dummyTaskFunction, handler_A, 1000, 1, 500);
+    log_to_csv(0, 1, "task_added_with_A");
+
+    handler_A_called = false;
+    handler_B_called = false;
+    s.set_number_failures(0, 3);
+    s.retry_task(0);
+
+    TEST_ASSERT_TRUE(handler_A_called);
+    TEST_ASSERT_FALSE(handler_B_called);
+
+    s.set_task_failure_procedure(0, handler_B);
+    handler_A_called = false;
+    handler_B_called = false;
+    log_to_csv(0, 1, "handler_updated_to_B");
+
+    s.set_number_failures(0, 3);
+    s.retry_task(0);
+
+    TEST_ASSERT_FALSE(handler_A_called);
+    TEST_ASSERT_TRUE(handler_B_called);
+}
+
+
 void run_failure_tests(void) {
     RUN_TEST(test_task_retry);
     RUN_TEST(test_retry_until_limit_then_fail);
@@ -137,4 +177,5 @@ void run_failure_tests(void) {
     RUN_TEST(test_retry_then_recovery);
     RUN_TEST(test_null_task_function_does_not_crash);
     RUN_TEST(test_null_failure_procedure_does_not_crash);
+    RUN_TEST(test_dynamic_failure_procedure_update);
 }

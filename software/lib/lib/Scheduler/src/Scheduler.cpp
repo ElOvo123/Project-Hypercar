@@ -9,10 +9,10 @@ unsigned long millis() {
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start_time);
     return duration.count();
 }
+
 #endif
 
-
-scheduler::scheduler(int retry_limit) : task_count(0), retry_limit(retry_limit){
+scheduler::scheduler(int retry_limit) : task_count(0), retry_limit(retry_limit), task_list{} {
 }
 
 scheduler::~scheduler(){
@@ -180,7 +180,7 @@ unsigned long scheduler::get_current_time(){
     return millis();
 }
 
-unsigned long scheduler::get_task_last_run_time(int task){
+unsigned long scheduler::get_task_last_run_time(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].last_run_time;
@@ -189,7 +189,7 @@ unsigned long scheduler::get_task_last_run_time(int task){
     }
 }
 
-unsigned long scheduler::get_task_running_period(int task){
+unsigned long scheduler::get_task_running_period(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].running_period;
@@ -198,7 +198,7 @@ unsigned long scheduler::get_task_running_period(int task){
     }
 }
 
-unsigned long scheduler::get_delay_until_unblock(int task){
+unsigned long scheduler::get_delay_until_unblock(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].delay_until_unblock;
@@ -207,7 +207,7 @@ unsigned long scheduler::get_delay_until_unblock(int task){
     }
 }
 
-unsigned long scheduler::get_max_execution_time(int task){
+unsigned long scheduler::get_max_execution_time(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].max_execution_time;
@@ -220,7 +220,7 @@ int scheduler::get_max_number_of_tasks(){
     return max_number_of_tasks;
 }
 
-int scheduler::get_task_priority(int task){
+int scheduler::get_task_priority(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].priority;
@@ -229,7 +229,7 @@ int scheduler::get_task_priority(int task){
     }
 }
 
-int scheduler::get_number_of_failures(int task){
+int scheduler::get_number_of_failures(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].failures;
@@ -238,7 +238,7 @@ int scheduler::get_number_of_failures(int task){
     }
 }
 
-int scheduler::get_task_original_priority(int task){
+int scheduler::get_task_original_priority(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].original_priority;
@@ -247,11 +247,11 @@ int scheduler::get_task_original_priority(int task){
     }
 }
 
-int scheduler::get_current_number_of_tasks(){
+int scheduler::get_current_number_of_tasks() const {
     return task_count;
 }
 
-bool scheduler::is_task_valid(int task){
+bool scheduler::is_task_valid(int task) const{
     if (task >= 0 && task < get_current_number_of_tasks())
     {
         return true;
@@ -260,7 +260,7 @@ bool scheduler::is_task_valid(int task){
     }
 }
 
-bool scheduler::get_is_task_running(int task){
+bool scheduler::get_is_task_running(int task) const{
     if (is_task_valid(task))
     {
         return task_list[task].task_is_running;
@@ -269,7 +269,7 @@ bool scheduler::get_is_task_running(int task){
     }
 }
 
-task_state scheduler::get_task_state(int task){
+task_state scheduler::get_task_state(int task) const{
     if (!is_task_valid(task)) 
     {
         return BLOCKED;
@@ -300,7 +300,8 @@ bool scheduler::add_task(void (*task_function)(), void (*task_failure_procedure)
     task_list[task].max_execution_time = max_execution_time;
     task_list[task].original_priority = priority;
 
-    task_count++;
+    add_task_count();
+    
     return true;
 }
 

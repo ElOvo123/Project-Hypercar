@@ -17,6 +17,7 @@ upload:
 
 clean:
 	@echo "Cleaning for environment: $(ENVIRONMENT)"
+	@rm -rf logs/scheduler_log.csv
 	@$(PLATFORMIO) run -e $(ENVIRONMENT) --target clean
 
 monitor:
@@ -30,12 +31,33 @@ upload-all:
 	@$(PLATFORMIO) run --target upload
 
 clean-all:
+	@rm -rf logs/scheduler_log.csv
 	@$(PLATFORMIO) run --target clean
 
 test_native:
 	@echo "Running tests for environment: native"
 	@rm -rf logs/scheduler_log.csv
 	@$(PLATFORMIO) test -e native --without-uploading
+
+cppcheck:
+	@echo "Running cppcheck..."
+	@cppcheck --enable=all --inconclusive --std=c++17 --force \
+		--suppress=missingIncludeSystem \
+		-I include -I src -I lib -I test \
+		$(SRC_DIR) lib test
+
+
+clang-tidy:
+	@echo "Running clang-tidy..."
+	@find $(SRC_DIR) -name '*.cpp' | xargs -I{} clang-tidy {} -- -Iinclude -Isrc -Ilib
+
+cppcheck-misra:
+	@echo "Running cppcheck with MISRA compliance checks..."
+	@cppcheck --enable=all --inconclusive --std=c++17 --force \
+		--rule-file=misra.json \
+		--suppress=missingIncludeSystem \
+		-I include -I src -I lib \
+		$(SRC_DIR)
 
 help:
 	@$(PLATFORMIO) run --help
