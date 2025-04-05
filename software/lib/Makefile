@@ -57,16 +57,7 @@ clang-tidy:
 	    -Ilib/scheduler/src \
 	    -std=c++17
 
-
-cppcheck-misra:
-	@echo "Running cppcheck with MISRA compliance checks..."
-	@cppcheck --enable=all --inconclusive --std=c++17 --force \
-		--rule-file=misra.json \
-		--suppress=missingIncludeSystem \
-		-I include -I src -I lib \
-		$(SRC_DIR)
-
 help:
 	@$(PLATFORMIO) run --help
 
-.PHONY: build upload clean monitor build-all upload-all clean-all help test
+.PHONY: build upload clean monitor build-all upload-all clean-all help test_native cppcheck clang-tidy
